@@ -114,7 +114,8 @@ export async function createWardrobe(host, { onSelect, onProgress, onError }) {
     while (queue.length && !disposed) {
       const i = queue.shift();
       try {
-        const gltf = await loader.loadAsync(`${import.meta.env.BASE_URL}models/${products[i].id}.glb`);
+        const gltf = await loader.loadAsync(`${import.meta.env.BASE_URL}models_hunyuan/${products[i].id}.glb`)
+          .catch(() => loader.loadAsync(`${import.meta.env.BASE_URL}models/${products[i].id}.glb`));
         const model = gltf.scene;
         if (disposed) { release(model); continue; }
         const box = new THREE.Box3().setFromObject(model);
