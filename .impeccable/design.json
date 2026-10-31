@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T07:15:15.161043+00:00",
+  "title": "Design System: LXW Atelier",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "contact",
+        "value": "0 5px 18px var(--line)",
+        "purpose": "Ambient elevation for the fixed WhatsApp contact control."
+      }
+    ],
+    "motion": [
+      {
+        "name": "round-hover",
+        "value": "background .2s",
+        "purpose": "Round control hover; disabled for reduced motion."
+      },
+      {
+        "name": "marquee",
+        "value": "marquee 38s linear infinite",
+        "purpose": "Continuous text rail, paused on hover or explicit pause and disabled for reduced motion."
+      },
+      {
+        "name": "scene-blend",
+        "value": "1 - Math.exp(-dt * 9)",
+        "purpose": "Frame-rate-independent garment transitions; immediate under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "650px"
+      }
+    ],
+    "focus": [
+      {
+        "name": "visible",
+        "value": "2px solid var(--ink); outline-offset: 5px",
+        "purpose": "Visible keyboard focus for interactive controls."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "WhatsApp action",
+      "kind": "button",
+      "description": "WhatsApp action as implemented in src/style.css.",
+      "html": "<a class=\"ds-primary\" href=\"#\">Order via WhatsApp</a>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:32px;min-height:50px;padding:12px 26px;background:var(--ink,#253331);color:var(--ivory,#f6f3ed);font:12px/1.6 var(--sans,Arial,sans-serif);text-decoration:none}.ds-primary:hover{opacity:.86}:focus-visible{outline:2px solid var(--ink,#253331);outline-offset:5px}"
+    },
+    {
+      "name": "Round scene control",
+      "kind": "button",
+      "description": "Round scene control as implemented in src/style.css.",
+      "html": "<button class=\"ds-round\" aria-label=\"Next garment\">\u2192</button>",
+      "css": ".ds-round{width:46px;height:46px;border:1px solid var(--line,rgba(37,51,49,.2));border-radius:50%;background:transparent;color:var(--ink,#253331);font:28px/1 var(--serif,Georgia,serif);cursor:pointer;transition:background .2s}.ds-round:hover{background:var(--peach,#edcfc0)}@media(prefers-reduced-motion:reduce){.ds-round{transition:none}}:focus-visible{outline:2px solid var(--ink,#253331);outline-offset:5px}"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "description": "Text action as implemented in src/style.css.",
+      "html": "<button class=\"ds-text\">Pause motion</button>",
+      "css": ".ds-text{border:0;background:transparent;min-height:44px;padding:8px;color:var(--ink,#253331);font:14px/1.6 var(--sans,Arial,sans-serif);text-decoration:underline;text-underline-offset:4px;cursor:pointer}:focus-visible{outline:2px solid var(--ink,#253331);outline-offset:5px}"
+    },
+    {
+      "name": "Garment selector",
+      "kind": "chip",
+      "description": "Garment selector as implemented in src/style.css.",
+      "html": "<button class=\"ds-piece\" aria-pressed=\"true\">Selected garment</button>",
+      "css": ".ds-piece{border:0;border-bottom:1px solid transparent;background:transparent;min-height:44px;padding:8px 14px;font:11px/1.6 var(--sans,Arial,sans-serif);color:var(--ink,#253331);cursor:pointer}.ds-piece[aria-pressed=true]{border-bottom-color:var(--ink,#253331)}:focus-visible{outline:2px solid var(--ink,#253331);outline-offset:5px}"
+    },
+    {
+      "name": "Quiet navigation",
+      "kind": "nav",
+      "description": "Quiet navigation as implemented in src/style.css.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">The wardrobe</a><a href=\"#\">How to order</a></nav>",
+      "css": ".ds-nav{display:flex;gap:40px;font:14px/1.6 var(--sans,Arial,sans-serif);color:var(--ink,#253331)}.ds-nav a{min-height:44px;display:flex;align-items:center;color:inherit;text-decoration:none}.ds-nav a:hover{text-decoration:underline;text-underline-offset:6px}@media(max-width:650px){.ds-nav{gap:16px;font-size:10px}}:focus-visible{outline:2px solid var(--ink,#253331);outline-offset:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Dawn studio",
+    "overview": "The wardrobe is the primary experience: generous ivory space, peach studio light, a silver clothing rail and real garment models. Editorial serif headlines pair with a quiet sans-serif interface. No glass, purple, video, stock imagery or invented product claims.",
+    "keyCharacteristics": [],
+    "rules": [],
+    "dos": [
+      "Do keep the garment scene primary and supporting interface quiet.",
+      "Do provide gesture alternatives and visible keyboard focus."
+    ],
+    "donts": [
+      "Don't add glass, purple, video, stock imagery or invented product claims."
+    ]
+  }
+}

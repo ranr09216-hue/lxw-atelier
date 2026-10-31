@@ -20,3 +20,7 @@ Build, Node product/order-message/GLB tests, JavaScript syntax checks and git wh
 ## Limits
 
 No physical iPhone Safari, synthesized native touch, screen-reader session or mid-phone frame-rate measurement was available. The 60fps objective is not a verified claim. Fonts use robust local Georgia/Helvetica/Arial stacks; there is no external font request. The Finesse source detector's favicon warning is a Vite `public/` resolution false positive (the production build contains favicon.svg); its ivory-token warning conflicts with the expressly requested palette; standalone JS/HTML stamp warnings are covered by the CSS build stamp and .finesse/log.json.
+
+## Independent finish review
+
+The reviewer scored all three material fixes resolved: paused/reduced-motion drag velocity, SVG action icons, and mobile story spacing. Final disposition: `ship` for those fixes. The final 390px mobile capture was taken in reduced motion after model load and a settling wait. The reviewer confirmed it is valid. This verdict covers the scored fixes rather than claiming physical-device or full accessibility certification.
