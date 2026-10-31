@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { products } from './products.js';
+import { HANGER_FITS, autoHangerFit, createHanger } from './hanger.js';
 
 export async function createWardrobe(host, { onSelect, onProgress, onError }) {
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: devicePixelRatio < 2, powerPreference: 'low-power' });
@@ -55,14 +56,24 @@ export async function createWardrobe(host, { onSelect, onProgress, onError }) {
   const slots = products.map((p, i) => {
     const root = new THREE.Group(), garment = new THREE.Group(), hanger = new THREE.Group();
     root.position.set((i - 1.5) * .85, railY, 0);
-    root.add(hanger, garment); scene.add(root);
+    // The hanger lives in garment space so it follows every garment transform exactly.
+    garment.add(hanger); root.add(garment); scene.add(root);
     // Seeded variation remains stable across reloads and reduced-motion frames.
     const seed = Math.sin((i + 1) * 127.1) * 43758.5453;
     const random = seed - Math.floor(seed);
     return { root, garment, hanger, loaded: false, yaw: (random * 2 - 1) * Math.PI / 30,
-      depth: (random - .5) * .055, phase: i * 1.91, shoulderY: .28 };
+      depth: (random - .5) * .055, phase: i * 1.91, rest: new THREE.Vector3(0, -.57, 0) };
   });
-  function fitHanger(model, slot) {
+  function fitHanger(model, slot, fit) {
+    // Hang the garment so the hook's rail centre lands on the rail (root origin) after the yaw.
+    fit ||= legacyFit(model);
+    slot.hanger.add(createHanger(fit, { wood, metal: hookMetal }));
+    slot.rest.fromArray(fit.rail).applyAxisAngle(new THREE.Vector3(0, 1, 0), slot.yaw).negate();
+    slot.garment.position.copy(slot.rest);
+    slot.garment.rotation.y = slot.yaw;
+  }
+  // Fallback for models without a solved fit: derive a plain hanger from the shoulder silhouette.
+  function legacyFit(model) {
     model.updateMatrixWorld(true);
     const box = new THREE.Box3().setFromObject(model);
     const size = box.getSize(new THREE.Vector3());
@@ -85,24 +96,7 @@ export async function createWardrobe(host, { onSelect, onProgress, onError }) {
     }
     const shoulders = bands[shoulderBand];
     const width = shoulders.isEmpty() ? size.x * .65 : shoulders.max.x - shoulders.min.x;
-    slot.shoulderY = box.max.y - (shoulderBand + .5) / bands.length * size.y;
-    // The shoulder band intersects the wooden arms, rather than hanging below them.
-    slot.garment.position.y = -.29 - slot.shoulderY;
-    const half = width * .95 / 2;
-    const left = new THREE.Vector3(-half, -.29, 0), peak = new THREE.Vector3(0, -.15, 0), right = new THREE.Vector3(half, -.29, 0);
-    slot.hanger.add(bar(left, peak, .019, wood), bar(peak, right, .019, wood), bar(left, right, .011, wood));
-    // Inner hook curve touches the top of the rail at y = rail radius.
-    const hook = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, -.15, 0), new THREE.Vector3(0, -.065, 0),
-      new THREE.Vector3(.043, -.015, 0), new THREE.Vector3(.04, .026, 0),
-      new THREE.Vector3(0, .034, 0), new THREE.Vector3(-.036, .012, 0),
-      new THREE.Vector3(-.037, -.018, 0),
-    ]);
-    const hookMesh = new THREE.Mesh(new THREE.TubeGeometry(hook, 24, .009, 8, false), hookMetal);
-    hookMesh.castShadow = true; slot.hanger.add(hookMesh);
-    // Rotate about the hook contact, including its depth offset, without breaking contact.
-    slot.hanger.rotation.y = slot.yaw;
-    slot.garment.rotation.y = slot.yaw;
+    return autoHangerFit(box.max.y - (shoulderBand + .5) / bands.length * size.y, width * .95 / 2);
   }
   let index = 0, detail = false, paused = false, disposed = false, visible = true;
   let yaw = 0, pitch = 0, velocity = 0, pointer = null, dragOffset = 0, frame;
@@ -114,8 +108,9 @@ export async function createWardrobe(host, { onSelect, onProgress, onError }) {
     while (queue.length && !disposed) {
       const i = queue.shift();
       try {
+        let fit = HANGER_FITS[products[i].id];
         const gltf = await loader.loadAsync(`${import.meta.env.BASE_URL}models_hunyuan/${products[i].id}.glb`)
-          .catch(() => loader.loadAsync(`${import.meta.env.BASE_URL}models/${products[i].id}.glb`));
+          .catch(() => { fit = null; return loader.loadAsync(`${import.meta.env.BASE_URL}models/${products[i].id}.glb`); });
         const model = gltf.scene;
         if (disposed) { release(model); continue; }
         const box = new THREE.Box3().setFromObject(model);
@@ -123,7 +118,7 @@ export async function createWardrobe(host, { onSelect, onProgress, onError }) {
         const scale = 1 / size.y;
         model.scale.setScalar(scale); model.position.copy(center).multiplyScalar(-scale);
         model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-        fitHanger(model, slots[i]); slots[i].garment.add(model); slots[i].loaded = true;
+        fitHanger(model, slots[i], fit); slots[i].garment.add(model); slots[i].loaded = true;
       } catch { failures++; }
       completed++; onProgress(completed, failures); wake();
     }
@@ -155,7 +150,7 @@ export async function createWardrobe(host, { onSelect, onProgress, onError }) {
       // Keep hooks seated on the rail; garment depth varies below the hook.
       approach(slot.root.position, 'z', active ? .35 : 0);
       approach(slot.root.rotation, 'x', active ? 0 : slot.depth + (i === index ? .09 : 0));
-      approach(slot.garment.position, 'y', active ? 0 : -.29 - slot.shoulderY);
+      for (const axis of ['x','y','z']) approach(slot.garment.position, axis, active ? 0 : slot.rest[axis]);
       const scale = active ? 1.13 : 1;
       for (const axis of ['x','y','z']) approach(slot.garment.scale, axis, scale);
       approach(slot.garment.rotation, 'y', active ? yaw : slot.yaw);
