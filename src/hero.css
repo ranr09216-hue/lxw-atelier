@@ -403,9 +403,32 @@ body > header {
   .hero-order { margin-left: 0; }
 }
 
-/* Separate the two left looks horizontally; leave room for image scale
-   and the model's bounded parallax without changing the mobile grid. */
+/* Equal desktop look sizes: two beneath the copy, two in the right column.
+   Gutters allow the existing image scale, float, and model parallax. */
 @media (min-width: 769px) {
-  .item-0 { width: 22%; }
-  .item-1 { left: 26.5%; width: 8%; }
+  .hero-stage { --hero-look-size: clamp(170px, 12.5vw, 190px); }
+  .hero-heading h1 { font-size: clamp(44px, 4.5vw, 72px); }
+  .hero-item { width: var(--hero-look-size); }
+  .item-0,
+  .item-1 {
+    top: max(300px, 40%);
+    bottom: auto;
+  }
+  .item-0 { left: 3%; }
+  .item-1 { left: calc(3% + var(--hero-look-size) + 32px); }
+  .item-2,
+  .item-3 {
+    left: auto;
+    right: 5%;
+  }
+  .hero-item .hero-media { max-height: none; }
+  .hero-item .item-label {
+    max-width: none;
+    margin-left: 0;
+  }
+  .hero-item .item-label > span {
+    display: block;
+    min-height: 2.7em;
+  }
+  .hero-item .hero-order { margin-left: 0; }
 }
