@@ -5,7 +5,6 @@
   --hero-rule: #8b8e82;
   --hero-media-ground: #fff;
   --hero-focus: #99664b;
-  --hero-item-shadow: rgba(89, 65, 48, 0.16);
 }
 body {
   background: var(--hero-cream);
@@ -367,19 +366,18 @@ body > header {
 }
 .hero-tryon[aria-pressed="true"] .item-float {
   transform: scale(1.04);
-  filter: drop-shadow(0 5px 9px var(--hero-item-shadow));
 }
 .hero-tryon:focus-visible {
   outline: none;
 }
 .hero-tryon:focus-visible .item-label > span {
-  text-decoration: underline;
+  text-decoration-line: underline;
   text-decoration-color: var(--hero-focus);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
 }
 .hero-tryon[aria-pressed="true"] .item-label > span {
-  text-decoration: underline;
+  text-decoration-line: underline;
   text-underline-offset: 4px;
 }
 .hero-order {
@@ -405,7 +403,9 @@ body > header {
   .hero-order { margin-left: 0; }
 }
 
-/* Keep the lower look clear of the model, including its pointer parallax. */
+/* Separate the two left looks horizontally; leave room for image scale
+   and the model's bounded parallax without changing the mobile grid. */
 @media (min-width: 769px) {
-  .item-1 { left: 10%; }
+  .item-0 { width: 22%; }
+  .item-1 { left: 26.5%; width: 8%; }
 }
