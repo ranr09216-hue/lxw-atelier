@@ -1,6 +1,8 @@
-export const personas = [
-  { id: "morning_studio", name: "Morning Studio", items: ["w01", "w02"] },
-  { id: "weekend_easy", name: "Weekend Easy", items: ["w03", "w04"] },
+export const heroLooks = [
+  { name: "Backless Cowl Mini Dress", item: "item-1.webp", tryon: "tryon-1.webp" },
+  { name: "Tube Top + Denim Micro Skirt", item: "item-2.webp", tryon: "tryon-2.webp" },
+  { name: "Lace Halter + Leopard Mini", item: "item-3.webp", tryon: "tryon-3.webp" },
+  { name: "Pink Baby Tee + Leather Set", item: "item-4.webp", tryon: "tryon-4.webp" },
 ];
-export const cycleItem = (index, step, count) =>
-  (((index + step) % count) + count) % count;
+export const heroOrderUrl = (look) =>
+  `https://wa.me/8614718114366?text=${encodeURIComponent(`Hi LXW Atelier, I'd like to order the ${look.name}. Please share the price and available sizes.`)}`;
