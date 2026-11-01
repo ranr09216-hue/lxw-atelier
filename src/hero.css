@@ -4,6 +4,8 @@
   --hero-muted: #575d56;
   --hero-rule: #8b8e82;
   --hero-media-ground: #fff;
+  --hero-focus: #99664b;
+  --hero-item-shadow: rgba(89, 65, 48, 0.16);
 }
 body {
   background: var(--hero-cream);
@@ -363,13 +365,18 @@ body > header {
   background: transparent;
   text-align: left;
 }
-.hero-tryon[aria-pressed="true"] {
-  outline: 2px solid var(--hero-rule);
-  outline-offset: 4px;
+.hero-tryon[aria-pressed="true"] .item-float {
+  transform: scale(1.04);
+  filter: drop-shadow(0 5px 9px var(--hero-item-shadow));
 }
 .hero-tryon:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 7px;
+  outline: none;
+}
+.hero-tryon:focus-visible .item-label > span {
+  text-decoration: underline;
+  text-decoration-color: var(--hero-focus);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
 }
 .hero-tryon[aria-pressed="true"] .item-label > span {
   text-decoration: underline;
@@ -396,4 +403,9 @@ body > header {
 }
 @media (max-width: 768px) {
   .hero-order { margin-left: 0; }
+}
+
+/* Keep the lower look clear of the model, including its pointer parallax. */
+@media (min-width: 769px) {
+  .item-1 { left: 10%; }
 }
