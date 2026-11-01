@@ -1,1 +1,27 @@
-[{"date":"2026-10-31","register":"brand/commerce","soul":"dawn studio","palette":"ivory, peach, cloud gray, ink","layout":"editorial lookbook","type":"serif display / sans body","material":"metal and textile","engine":"three.js garment rack","motion":"interactive slide, lift, yaw; subtle idle sway","previous":null}]
+[
+  {
+    "date": "2026-10-31",
+    "register": "brand/commerce",
+    "soul": "dawn studio portrait",
+    "palette": "cream and ink",
+    "layout": "persona-centered orbit lookbook; mobile product grid",
+    "type": "thin serif display / compact sans labels",
+    "material": "textile and studio paper",
+    "engine": "CSS float and native dialog",
+    "motion": "6s persona float, offset garment floats, bounded pointer parallax, product push-in and drawer",
+    "previous": "dawn studio rack; retained as second screen",
+    "constraints": "User supplied mockup and assets fix the composition; no random rotation of pinned brand choices."
+  },
+  {
+    "date": "2026-10-31",
+    "register": "brand/commerce",
+    "soul": "dawn studio",
+    "palette": "ivory, peach, cloud gray, ink",
+    "layout": "editorial lookbook",
+    "type": "serif display / sans body",
+    "material": "metal and textile",
+    "engine": "three.js garment rack",
+    "motion": "interactive slide, lift, yaw; subtle idle sway",
+    "previous": null
+  }
+]

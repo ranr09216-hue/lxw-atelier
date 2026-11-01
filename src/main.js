@@ -60,7 +60,8 @@ function fallback() {
   $('#fallback').hidden = false;
   $('#motion').hidden = true;
 }
-import('./wardrobe.js').then(async ({ createWardrobe }) => {
+function loadWardrobe() {
+return import('./wardrobe.js').then(async ({ createWardrobe }) => {
   wardrobe = await createWardrobe($('#scene'), {
     onSelect: select,
     onProgress: (n, failures) => {
@@ -75,4 +76,9 @@ import('./wardrobe.js').then(async ({ createWardrobe }) => {
   });
   wardrobe.select(selected, detail); motion();
 }).catch(fallback);
+}
+const rackObserver = new IntersectionObserver(entries => {
+  if (entries.some(entry => entry.isIntersecting)) { rackObserver.disconnect(); loadWardrobe(); }
+}, { rootMargin: '200px' });
+rackObserver.observe($('#studio'));
 window.addEventListener('pagehide', (e) => { if (!e.persisted) wardrobe?.dispose(); });
