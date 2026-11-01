@@ -3,6 +3,7 @@
   --hero-cream: #f4efe6;
   --hero-muted: #575d56;
   --hero-rule: #8b8e82;
+  --hero-media-ground: #fff;
 }
 body {
   background: var(--hero-cream);
@@ -50,7 +51,7 @@ body > header {
   border: 1px solid transparent;
   border-radius: 30px;
   padding: 4px 12px 4px 4px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--hero-muted);
 }
 .persona-switch button[aria-pressed="true"] {
@@ -97,14 +98,15 @@ body > header {
   height: 100%;
   left: 28%;
   transition: transform 0.5s var(--ease);
-  mix-blend-mode: multiply;
   pointer-events: none;
+  mix-blend-mode: multiply;
 }
 .persona-float {
   position: relative;
   width: 100%;
   height: 100%;
   animation: dawn-float 6s ease-in-out infinite;
+  background: var(--hero-media-ground);
 }
 .persona-image {
   position: absolute;
@@ -114,6 +116,7 @@ body > header {
   object-fit: contain;
   opacity: 0;
   transition: opacity 0.7s ease;
+  mix-blend-mode: multiply;
 }
 .persona-image.is-current {
   opacity: 1;
@@ -126,18 +129,20 @@ body > header {
   background: transparent;
   text-align: left;
   z-index: 2;
+  mix-blend-mode: multiply;
 }
 .item-float {
   display: block;
   animation: dawn-float 6.7s ease-in-out infinite;
   transition: transform 0.65s var(--ease);
-  mix-blend-mode: multiply;
 }
 .hero-media {
   display: block;
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
+  background: var(--hero-media-ground);
+  transition: opacity 0.45s ease;
 }
 .hero-media img,
 .hero-media video {
@@ -145,6 +150,14 @@ body > header {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  mix-blend-mode: multiply;
+}
+/* Only one opaque source may blend with the neutral backing at a time. */
+.hero-media:has(:where(video[src])) > img {
+  visibility: hidden;
+}
+.reduced-motion .hero-media > img {
+  visibility: visible;
 }
 .hero-media video {
   position: absolute;
@@ -182,18 +195,17 @@ body > header {
 .item-3 .item-float {
   animation-delay: -1s;
 }
-.hero-item.is-secondary .item-float {
-  opacity: 0.82;
+.hero-item.is-secondary .hero-media {
+  opacity: 0.35;
 }
 .hero-item:hover .item-float,
 .hero-item:focus-visible .item-float {
-  opacity: 1;
   transform: scale(1.06);
 }
 .item-label {
   position: relative;
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.35;
   max-width: 175px;
   margin: -8px 0 0 12%;
@@ -213,7 +225,7 @@ body > header {
 }
 .item-label b {
   display: block;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 4px;
 }
 .hero-bottom {
@@ -311,10 +323,14 @@ body > header {
   font-size: 24px;
 }
 .hero-detail .hero-media {
+  width: min(100%, 42svh);
+  aspect-ratio: 1;
   mix-blend-mode: multiply;
-  width: 100%;
-  max-height: 42svh;
   margin: 16px auto;
+}
+.hero-detail .hero-media img,
+.hero-detail .hero-media video {
+  padding: 16px;
 }
 .hero-detail h2 {
   font-size: 32px;
@@ -397,10 +413,8 @@ body > header {
     display: contents;
   }
   .hero-wordmark {
-    margin: 18px 6% 0;
+    margin: 8px 6% 0;
     order: 0;
-  }
-  .hero-wordmark {
     font-size: 17px;
   }
   .hero-heading {
@@ -409,10 +423,10 @@ body > header {
     top: auto;
     left: auto;
     max-width: none;
-    margin: 16px 6% 0;
+    margin: 8px 6% 0;
   }
   .hero-heading h1 {
-    font-size: clamp(46px, 10.5vw, 70px);
+    font-size: clamp(36px, 9.5vw, 70px);
     line-height: 1.05;
   }
   .hero-heading h1 br {
@@ -420,37 +434,37 @@ body > header {
   }
   .hero-heading p {
     font-size: 12px;
-    margin-top: 14px;
+    margin-top: 8px;
   }
   .persona-switch {
     order: 2;
     position: static;
-    margin: 24px 6% 0;
+    margin: 12px 6% 0;
     justify-content: flex-start;
     gap: 8px;
   }
   .persona-switch button {
     padding-right: 10px;
-    font-size: 11px;
+    font-size: 13px;
   }
   .hero-stage {
     order: 3;
     position: relative;
     inset: auto;
-    padding-top: 16px;
+    padding-top: 4px;
   }
   .persona-parallax {
     position: relative;
     left: auto;
     width: 80%;
-    height: 390px;
+    height: clamp(140px, 20svh, 190px);
     margin: 0 auto;
   }
   .hero-items {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px 12px;
-    margin: 16px 6% 24px;
+    gap: 12px;
+    margin: 4px 6% 16px;
   }
   .hero-item,
   .item-0,
@@ -465,7 +479,7 @@ body > header {
   .item-label {
     margin: 6px 0 0;
     padding: 0;
-    font-size: 12px;
+    font-size: 13px;
     max-width: none;
   }
   .item-label::before {
@@ -499,8 +513,7 @@ body > header {
     justify-content: flex-end;
   }
   .hero-detail .hero-media {
-    max-height: 34svh;
-    width: min(100%, 300px);
+    width: min(100%, 300px, 34svh);
   }
   .hero-detail h2 {
     font-size: 27px;
@@ -538,27 +551,29 @@ body > header {
     display: none;
   }
 }
-/* Blend the whole item stacking context so video surfaces share the studio ground. */
-.hero-item {
-  mix-blend-mode: multiply;
-}
-.persona-parallax {
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 5%,
-    black 95%,
-    transparent
-  );
-}
-
-.hero-item .hero-media {
+/* Composite each opaque source once, onto a neutral backing, then multiply
+   that group with the studio. A cream backing would multiply twice and an
+   unmasked backing on the float would cover overlapping products. */
+.persona-float,
+.hero-media {
   mask-image:
-    linear-gradient(to right, transparent, black 5%, black 95%, transparent),
-    linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+    linear-gradient(to right, transparent, black 8%, black 92%, transparent),
+    linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
   mask-composite: intersect;
 }
+@media (prefers-reduced-motion: reduce) {
+  .hero-media > img { visibility: visible; }
+  .hero-media { transition: none; }
+}
+/* Keep mobile contact in document flow, after the content: a fixed control
+   can otherwise cross a product at any scroll position. */
 @media (max-width: 768px) {
+  .contact {
+    position: static;
+    width: 44px;
+    height: 44px;
+    margin: 0 6% max(16px, env(safe-area-inset-bottom)) auto;
+  }
   .hero-detail {
     flex: 0 0 auto;
     max-height: 92svh;
